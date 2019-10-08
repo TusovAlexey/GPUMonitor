@@ -536,7 +536,7 @@ def plot_gpu(folder, game, name, num_steps, bin_size=10, smooth=1, time=None, sa
     if x_memory_utilization is None or y_memory_utilization is None:
         print("memory util null")
         return
-    plot_gpu_aux(game, name + " - GPU memory utilization", num_steps, time, "gpu_memory_utilization_results.png",
+    plot_gpu_aux(folder, game, name + " - GPU memory utilization", num_steps, time, "gpu_memory_utilization_results.png",
                  x_memory_utilization, y_memory_utilization, 'GPU memory utilization [percent]', False)
     return
 

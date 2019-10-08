@@ -268,8 +268,6 @@ def DQN(env, batch_size, max_frames, log_dir):
         episode_reward += reward
 
         if done:
-            # gpu_info = monitor.get_info_dict()
-            print("{}".format(monitor.get_info_string()))
             # Episode ended
             model.finish_nstep()
             model.reset_hx()

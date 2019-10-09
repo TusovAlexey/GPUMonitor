@@ -204,7 +204,7 @@ class Model(BaseAgent):
     def MSE(self, x):
         return 0.5 * x.pow(2)
 
-def DQN(env, batch_size, max_frames, log_dir):
+def DQN_experiment(env, batch_size, max_frames, log_dir):
     LOG_DIR = log_dir+"DQN/"
     ATARI_ENV = env
     monitor = GPUMonitor()

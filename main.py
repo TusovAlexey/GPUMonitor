@@ -2,7 +2,7 @@
 
 
 import argparse
-from agents.DQN import DQN
+from agents.DQN import DQN_experiment
 
 
 def arg_parser():
@@ -12,15 +12,15 @@ def arg_parser():
                                      "\nIrina Gorodovskaya  ir.gorod[at]gmail.com",
                                      epilog="example usage:"\
                                             "python ./main.py")
-    parser.add_argument("--log_dir", type=str, default="./log/",
+    parser.add_argument("--log_dir", dest='log_dir', type=str, default="./log/",
                         help="Directory for log files")
-    parser.add_argument("--env", type=str, default="PongNoFrameskip-v4",
+    parser.add_argument("--env", dest='env', type=str, default="PongNoFrameskip-v4",
                         help="Name of the gym environment used to train the agents")
-    parser.add_argument("--batch_size", type=int, default=32,
+    parser.add_argument("--batch_size", dest='batch_size', type=int, default=32,
                         help="Batch size input to NN")
-    parser.add_argument("--max_frames", type=int, default=1000000, help="Max frames")
-    parser.add_argument("--model", type=str, default="DQN", help="Reinforcement learning model to use")
-    args = parser.parse_known_args()
+    parser.add_argument("--max_frames", dest='max_frames', type=int, default=1000000, help="Max frames")
+    parser.add_argument("--model", dest='model', type=str, default="DQN", help="Reinforcement learning model to use")
+    args = parser.parse_args()
     return args
 
 
@@ -30,7 +30,7 @@ def arg_parser():
 if __name__ == '__main__':
     args = arg_parser()
     if args.model == "DQN" or args.model == "ALL":
-        DQN(args.env, args.batch_size, args.max_frames, args.log_dir)
+        DQN_experiment(args.env, args.batch_size, args.max_frames, args.log_dir)
 #    elif args.model == "NSTEP_DQN" or args.model == "ALL":
 #        #NSTEP_DQN(args.env, args.batch_size, args.max_frames, args.log_dir)
 #    elif args.model == "DDQN" or args.model == "ALL":

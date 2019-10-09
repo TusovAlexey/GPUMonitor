@@ -97,27 +97,30 @@ class CategoricalDQN(nn.Module):
             self.fc1.sample_noise()
             self.fc2.sample_noise()
 
+
 class CategoricalDuelingDQN(nn.Module):
-    def __init__(self, input_shape, num_outputs, noisy=False, sigma_init=0.5, body=SimpleBody, atoms=51):
+    def __init__(self, input_shape, num_actions, sigma_init=0.5, atoms=51):
         super(CategoricalDuelingDQN, self).__init__()
         
         self.input_shape = input_shape
-        self.num_actions = num_outputs
-        self.noisy=noisy
-        self.atoms=atoms
+        self.num_actions = num_actions
+        self.atoms = atoms
 
-        self.body = body(input_shape, num_outputs, noisy, sigma_init)
+        self.conv1 = nn.Conv2d(self.input_shape[0], 32, kernel_size=8, stride=4)
+        self.conv2 = nn.Conv2d(32, 64, kernel_size=4, stride=2)
+        self.conv3 = nn.Conv2d(64, 64, kernel_size=3, stride=1)
 
-        self.adv1 = nn.Linear(self.body.feature_size(), 512) if not self.noisy else NoisyLinear(self.body.feature_size(), 512, sigma_init)
-        self.adv2 = nn.Linear(512, self.num_actions*self.atoms) if not self.noisy else NoisyLinear(512, self.num_actions*self.atoms, sigma_init)
+        self.adv1 = NoisyLinear(self.feature_size(), 512, sigma_init)
+        self.adv2 = NoisyLinear(512, self.num_actions*self.atoms, sigma_init)
 
-        self.val1 = nn.Linear(self.body.feature_size(), 512) if not self.noisy else NoisyLinear(self.body.feature_size(), 512, sigma_init)
-        self.val2 = nn.Linear(512, 1*self.atoms) if not self.noisy else NoisyLinear(512, 1*self.atoms, sigma_init)
-
+        self.val1 = NoisyLinear(self.feature_size(), 512, sigma_init)
+        self.val2 = NoisyLinear(512, 1*self.atoms, sigma_init)
         
     def forward(self, x):
-        x = self.body(x)
-
+        x = F.relu(self.conv1(x))
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = x.view(x.size(0), -1)
         adv = F.relu(self.adv1(x))
         adv = self.adv2(adv).view(-1, self.num_actions, self.atoms)
 
@@ -128,13 +131,14 @@ class CategoricalDuelingDQN(nn.Module):
 
         return F.softmax(final, dim=2)
     
+    def feature_size(self):
+        return self.conv3(self.conv2(self.conv1(torch.zeros(1, *self.input_shape)))).view(1, -1).size(1)
+
     def sample_noise(self):
-        if self.noisy:
-            self.body.sample_noise()
-            self.adv1.sample_noise()
-            self.adv2.sample_noise()
-            self.val1.sample_noise()
-            self.val2.sample_noise()
+        self.adv1.sample_noise()
+        self.adv2.sample_noise()
+        self.val1.sample_noise()
+        self.val2.sample_noise()
 
 
 class QRDQN(nn.Module):

@@ -5,6 +5,7 @@ from utils.ReplayMemory import PrioritizedReplayMemory
 from GPUMonitor import GPUMonitor, GPUMonitorWrapper
 from utils.plot import plot_gpu
 
+import glob
 from IPython.display import clear_output
 from matplotlib import pyplot as plt
 #%matplotlib inline
@@ -24,7 +25,7 @@ class Model(DQN_Agent):
         self.supports = torch.linspace(self.v_min, self.v_max, self.atoms).view(1, 1, self.atoms).to(config.device)
         self.delta = (self.v_max - self.v_min) / (self.atoms - 1)
 
-        super(Model, self).__init__(log_dir, static_policy, env, config)
+        super(Model, self).__init__(static_policy, env, config, log_dir=log_dir)
 
 
         self.nsteps=max(self.nsteps,3)

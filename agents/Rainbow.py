@@ -7,7 +7,7 @@ from utils.plot import plot_gpu
 
 from IPython.display import clear_output
 from matplotlib import pyplot as plt
-%matplotlib inline
+#%matplotlib inline
 from timeit import default_timer as timer
 from datetime import timedelta
 from utils.wrappers import *

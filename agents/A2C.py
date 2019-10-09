@@ -188,11 +188,6 @@ def A2C_experiment(env, batch_size, max_frames, log_dir):
     obs_shape = envs.observation_space.shape
     obs_shape = (obs_shape[0] * 4, *obs_shape[1:])
 
-    # GPU Monitor
-    monitor = GPUMonitor()
-    #envs = [GPUMonitorWrapper(monitor, env, os.path.join(log_dir, env_id)) for env in envs]  # for all envs
-    envs[0] = GPUMonitorWrapper(monitor, envs[0], os.path.join(log_dir, env_id))
-
     model = Model(log_dir, env=envs, config=config)
 
     current_obs = torch.zeros(config.num_agents, *obs_shape,

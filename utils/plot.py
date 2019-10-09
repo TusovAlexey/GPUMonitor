@@ -90,22 +90,17 @@ def load_partial_gpu_data(indir, smooth, bin_size, idx):
             f.readline()
             f.readline()
             for line in f:
-                print("line: {}".format(line))
                 tmp = line.split(',')
                 # t_time = float(tmp[6])
-                tmp = [float(tmp[0]), int(tmp[1]), tmp[idx]]
-                print("tmp: {}".format(tmp))
+                tmp = [float(tmp[0]), int(tmp[1]), float(tmp[idx])]
                 datas.append(tmp)
-    print("datas: {}".format(datas))
     datas = sorted(datas, key=lambda d_entry: d_entry[0])
-    print("datas: {}".format(datas))
     result = []
     timesteps = 0
     for i in range(len(datas)):
         result.append([timesteps, datas[i][-1]])
         timesteps += datas[i][1]
 
-    print("Results: {}".format(result))
     if len(result) < bin_size:
         return [None, None]
 
@@ -488,7 +483,6 @@ def plot_gpu_aux(folder, game, name, num_steps, time, save_filename, x, y, y_lab
     if ipynb:
         plt.show()
     else:
-        print("Saving png: {}".format(folder + save_filename))
         plt.savefig(folder + save_filename)
     plt.clf()
     plt.close()
@@ -499,42 +493,36 @@ def plot_gpu(folder, game, name, num_steps, bin_size=10, smooth=1, time=None, sa
              ipynb=False):
     x_memory, y_memory = load_partial_gpu_data(folder, smooth, bin_size, 2)
     if x_memory is None or y_memory is None:
-        print("Memory null")
         return
     plot_gpu_aux(folder, game, name + " - GPU memory usage", num_steps, time, "gpu_memory_usage_results.png", x_memory,
                  y_memory, 'GPU memory usage [Mb]', False)
 
     x_power, y_power = load_partial_gpu_data(folder, smooth, bin_size, 3)
     if x_power is None or y_power is None:
-        print("Power null")
         return
     plot_gpu_aux(folder, game, name + " - GPU power usage", num_steps, time, "gpu_power_usage_results.png", x_power,
                  y_power, 'GPU power usage [W]', False)
 
     x_fan_speed, y_fan_speed = load_partial_gpu_data(folder, smooth, bin_size, 4)
     if x_fan_speed is None or y_fan_speed is None:
-        print("fan speed null")
         return
     plot_gpu_aux(folder, game, name + " - GPU fan speed", num_steps, time, "gpu_fan_speed_results.png", x_fan_speed,
                  y_fan_speed, 'GPU fan speed [percent]', False)
 
     x_temperature, y_temperature = load_partial_gpu_data(folder, smooth, bin_size, 5)
     if x_temperature is None or y_temperature is None:
-        print("Temperature null")
         return
     plot_gpu_aux(folder, game, name + " - GPU temperature", num_steps, time, "gpu_temperature_results.png",
                  x_temperature, y_temperature, 'GPU temperature [celsius]', False)
 
     x_gpu_utilization, y_gpu_utilization = load_partial_gpu_data(folder, smooth, bin_size, 6)
     if x_gpu_utilization is None or y_gpu_utilization is None:
-        print("gpu util null")
         return
     plot_gpu_aux(folder, game, name + " - GPU utilization", num_steps, time, "gpu_utilization_results.png",
                  x_gpu_utilization, y_gpu_utilization, 'GPU utilization [percent]', False)
 
     x_memory_utilization, y_memory_utilization = load_partial_gpu_data(folder, smooth, bin_size, 7)
     if x_memory_utilization is None or y_memory_utilization is None:
-        print("memory util null")
         return
     plot_gpu_aux(folder, game, name + " - GPU memory utilization", num_steps, time, "gpu_memory_utilization_results.png",
                  x_memory_utilization, y_memory_utilization, 'GPU memory utilization [percent]', False)

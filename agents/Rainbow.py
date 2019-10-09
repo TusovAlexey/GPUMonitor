@@ -24,7 +24,8 @@ class Model(DQN_Agent):
         self.supports = torch.linspace(self.v_min, self.v_max, self.atoms).view(1, 1, self.atoms).to(config.device)
         self.delta = (self.v_max - self.v_min) / (self.atoms - 1)
 
-        super(Model, self).__init__(static_policy, env, config, log_dir=log_dir)
+        super(Model, self).__init__(log_dir, static_policy, env, config)
+
 
         self.nsteps=max(self.nsteps,3)
     
@@ -118,8 +119,13 @@ def plot(folder, frame_idx, rewards, losses, sigma, elapsed_time, ipynb=False, s
 
 
 def Rainbow_experiment(env, batch_size, max_frames, log_dir):
-    monitor = GPUMonitor()
     log_dir = log_dir + "Rainbow/"
+    try:
+        os.makedirs(log_dir)
+    except OSError:
+        files = glob.glob(os.path.join(log_dir, '*.monitor.csv'))
+        for f in files:
+            os.remove(f)
 
     config = Config()
 
@@ -157,6 +163,7 @@ def Rainbow_experiment(env, batch_size, max_frames, log_dir):
 
     env_id = env
     env = make_atari(env_id)
+    monitor = GPUMonitor()
     env = GPUMonitorWrapper(monitor, env, os.path.join(log_dir, env_id))
     env = wrap_deepmind(env, frame_stack=False)
     env = wrap_pytorch(env)

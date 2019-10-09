@@ -1,8 +1,7 @@
-
-
-
 import argparse
 from agents.DQN import DQN_experiment
+from agents.A2C import A2C_experiment
+from agents.Rainbow import Rainbow_experiment
 
 
 def arg_parser():
@@ -24,9 +23,6 @@ def arg_parser():
     return args
 
 
-
-
-
 if __name__ == '__main__':
     args = arg_parser()
     if args.model == "DQN" or args.model == "ALL":
@@ -43,16 +39,16 @@ if __name__ == '__main__':
 #        #Priority_reply_DQN(args.env, args.batch_size, args.max_frames, args.log_dir)
 #    elif args.model == "Categorical_DQN" or args.model == "ALL":
 #        #Categorical_DQN(args.env, args.batch_size, args.max_frames, args.log_dir)
-#    elif args.model == "Rainbow" or args.model == "ALL":
-#        #Rainbow(args.env, args.batch_size, args.max_frames, args.log_dir)
+    elif args.model == "Rainbow" or args.model == "ALL":
+        Rainbow_experiment(args.env, args.batch_size, args.max_frames, args.log_dir)
 #    elif args.model == "QuantileRegression_DQN" or args.model == "ALL":
 #        #QuantileRegression_DQN(args.env, args.batch_size, args.max_frames, args.log_dir)
 #    elif args.model == "Quantile_Rainbow" or args.model == "ALL":
 #        #Quantile_Rainbow(args.env, args.batch_size, args.max_frames, args.log_dir)
 #    elif args.model == "DRQN" or args.model == "ALL":
 #        #DRQN(args.env, args.batch_size, args.max_frames, args.log_dir)
-#    elif args.model == "A2C" or args.model == "ALL":
-#        #A2C(args.env, args.batch_size, args.max_frames, args.log_dir)
+    elif args.model == "A2C" or args.model == "ALL":
+        A2C_experiment(args.env, args.batch_size, args.max_frames, args.log_dir)
 #    elif args.model == "GEA" or args.model == "ALL":
 #        #GEA(args.env, args.batch_size, args.max_frames, args.log_dir)
 #    elif args.model == "PPO" or args.model == "ALL":

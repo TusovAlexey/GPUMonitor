@@ -1,5 +1,5 @@
 import torch
-from agents.DQN import Model as DQN_Agent
+from agents.DQN_RB import Model as DQN_Agent
 from networks.networks import CategoricalDuelingDQN
 from utils.ReplayMemory import PrioritizedReplayMemory
 from GPUMonitor import GPUMonitor, GPUMonitorWrapper

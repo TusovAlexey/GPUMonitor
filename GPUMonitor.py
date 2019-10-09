@@ -1,13 +1,18 @@
 # pip install py3nvml
 # pip install psutil
+import os
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 from gym.core import Wrapper
 import time
-from glob import glob
+import glob
 import csv
 import os.path as osp
 import json
 import psutil
 import py3nvml.py3nvml as py3nvml
+import pandas as pd
 
 class GPUMemory(object):
     def __init__(self, total, used, free):
@@ -310,3 +315,31 @@ def load_GPU_results(dir):
     df['t'] -= min(header['t_start'] for header in headers)
     df.headers = headers # HACK to preserve backwards compatibility
     return df
+
+def plot_gpu_results(log_dir, game, metrics, algorithms=None, ipynb=None):
+    subdirs = algorithms
+    if subdirs == None:
+        subdirs = next(os.walk('log/'))[1]
+    fig, axes = plt.subplots(nrows=len(metrics), ncols=1, gridspec_kw={'hspace': 0, 'wspace': 0})
+    titles = None
+    for subdir in subdirs:
+        df = pd.read_csv(log_dir + '/' + subdir + '/' + game + '.GPUMonitor.csv', comment="#")
+        df = df[['episode_length'] + metrics]
+        df['episode_length'] = df['episode_length'].cumsum()
+        df = df.rename(columns={'episode_length':'Number of Timesteps'})
+        df.columns = df.columns.str.replace('_', ' ', regex=True)
+        col = df.columns.to_list()[1:]
+        titles = col
+        for row, i in enumerate(axes):
+            axes[row].plot(df['Number of Timesteps'].values, df[col[row-1]], label=subdir)
+            axes[row].legend(loc='best')
+    for row, i in enumerate(axes):
+        axes[row].set(xlabel="Number of Timesteps", ylabel=titles[row-1] + '\n' + '[Percent]')
+    plt.tight_layout()
+    save_filename = log_dir + '/' + game + '.' + '_'.join(metrics) + '.png'
+    if ipynb:
+       plt.show()
+    else:
+       plt.savefig(save_filename)
+    return
+

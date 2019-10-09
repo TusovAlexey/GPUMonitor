@@ -24,7 +24,7 @@ matplotlib.use('Agg')
 
 
 class Model(BaseAgent):
-    def __init__(self, static_policy=False, env=None, config=None, log_dir='/tmp/gym'):
+    def __init__(self, log_dir, static_policy=False, env=None, config=None):
         super(Model, self).__init__(config=config, env=env, log_dir=log_dir)
         self.device = config.device
 
@@ -193,7 +193,7 @@ def A2C_experiment(env, batch_size, max_frames, log_dir):
     #envs = [GPUMonitorWrapper(monitor, env, os.path.join(log_dir, env_id)) for env in envs]  # for all envs
     envs[0] = GPUMonitorWrapper(monitor, envs[0], os.path.join(log_dir, env_id))
 
-    model = Model(env=envs, config=config)
+    model = Model(log_dir, env=envs, config=config)
 
     current_obs = torch.zeros(config.num_agents, *obs_shape,
                               device=config.device, dtype=torch.float)

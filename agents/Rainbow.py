@@ -17,7 +17,7 @@ matplotlib.use('Agg')
 
 
 class Model(DQN_Agent):
-    def __init__(self, static_policy=False, env=None, config=None, log_dir='/tmp/gym'):
+    def __init__(self, log_dir, static_policy=False, env=None, config=None):
         self.atoms=config.ATOMS
         self.v_max=config.V_MAX
         self.v_min=config.V_MIN
@@ -160,7 +160,7 @@ def Rainbow_experiment(env, batch_size, max_frames, log_dir):
     env = GPUMonitorWrapper(monitor, env, os.path.join(log_dir, env_id))
     env = wrap_deepmind(env, frame_stack=False)
     env = wrap_pytorch(env)
-    model = Model(env=env, config=config)
+    model = Model(log_dir, env=env, config=config)
 
     episode_reward = 0
 

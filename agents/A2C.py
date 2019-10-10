@@ -248,16 +248,16 @@ def A2C_experiment(env, batch_size, max_frames, log_dir):
                 clear_output()
                 end = timer()
                 total_num_steps = (frame_idx + 1) * config.num_agents * config.rollout
-                print(
-                    "Updates {}, Num Timesteps {}, FPS {},\nMean/Median Reward {:.1f}/{:.1f}, Min/Max Reward {:.1f}/{:.1f},\nEntropy {:.5f}, Value Loss {:.5f}, Policy Loss {:.5f}".
-                    format(frame_idx, total_num_steps,
-                           int(total_num_steps / (end - start)),
-                           np.mean(final_rewards),
-                           np.median(final_rewards),
-                           np.min(final_rewards),
-                           np.max(final_rewards), dist_entropy,
-                           value_loss, action_loss))
-                plot(log_dir, env_id, 'a2c',
+                # print(
+                #     "Updates {}, Num Timesteps {}, FPS {},\nMean/Median Reward {:.1f}/{:.1f}, Min/Max Reward {:.1f}/{:.1f},\nEntropy {:.5f}, Value Loss {:.5f}, Policy Loss {:.5f}".
+                #     format(frame_idx, total_num_steps,
+                #            int(total_num_steps / (end - start)),
+                #            np.mean(final_rewards),
+                #            np.median(final_rewards),
+                #            np.min(final_rewards),
+                #            np.max(final_rewards), dist_entropy,
+                #            value_loss, action_loss))
+                plot(log_dir, env_id, 'A2C',
                      config.MAX_FRAMES * config.num_agents * config.rollout)
 
                 dtime = int(timer() - start)

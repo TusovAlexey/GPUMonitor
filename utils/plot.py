@@ -285,7 +285,7 @@ def visdom_plot(viz, win, folder, game, name, num_steps, bin_size=100, smooth=1)
     return viz.image(image, win=win)
 
 
-def plot(folder, game, name, num_steps, bin_size=100, smooth=1):
+def plot(folder, game, name, num_steps, bin_size=100, smooth=1, ipynb=False, save_filename="A2CReward"):
     matplotlib.rcParams.update({'font.size': 20})
     tx, ty = load_reward_data(folder, smooth, bin_size)
 
@@ -306,7 +306,12 @@ def plot(folder, game, name, num_steps, bin_size=100, smooth=1):
 
     plt.title(game)
     plt.legend(loc=4)
-    plt.show()
+    if ipynb:
+        plt.show()
+    else:
+        plt.savefig(folder + save_filename)
+    plt.clf()
+    plt.close()
 
 
 def make_patch_spines_invisible(ax):

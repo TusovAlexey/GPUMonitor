@@ -102,7 +102,7 @@ class Model(DQN_Agent):
         return next_dist.sum(dim=2).max(1)[1].view(next_states.size(0), 1, 1).expand(-1, -1, self.atoms)
 
 
-def plot(folder, frame_idx, rewards, losses, sigma, elapsed_time, ipynb=False, save_filename = "RainbowReward"):
+def plot(folder, frame_idx, rewards, losses, sigma, elapsed_time, ipynb=False, save_filename="RainbowReward"):
     clear_output(True)
     plt.figure(figsize=(20,5))
     plt.subplot(131)
@@ -195,12 +195,12 @@ def Rainbow_experiment(env, batch_size, max_frames, log_dir):
             episode_reward = 0
 
             if np.mean(model.rewards[-10:]) > 19:
-                plot(log_dir, frame_idx, model.rewards, model.losses, model.sigma_parameter_mag,
+                plot(log_dir, frame_idx, model.rewards, None, None,
                      timedelta(seconds=int(timer() - start)))
                 break
 
         if frame_idx % 10000 == 0:
-            plot(log_dir, frame_idx, model.rewards, model.losses, model.sigma_parameter_mag,
+            plot(log_dir, frame_idx, model.rewards, None, None,
                  timedelta(seconds=int(timer() - start)))
 
             dtime = int(timer() - start)

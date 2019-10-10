@@ -319,7 +319,7 @@ def load_GPU_results(dir):
 def plot_gpu_results(log_dir, game, metrics, algorithms=None, ipynb=None):
     subdirs = algorithms
     if subdirs == None:
-        subdirs = next(os.walk('log/'))[1]
+        subdirs = next(os.walk(log_dir + '/'))[1]
     fig, axes = plt.subplots(nrows=len(metrics), ncols=1, gridspec_kw={'hspace': 0, 'wspace': 0})
     titles = None
     for subdir in subdirs:
@@ -342,4 +342,3 @@ def plot_gpu_results(log_dir, game, metrics, algorithms=None, ipynb=None):
     else:
        plt.savefig(save_filename)
     return
-

@@ -44,17 +44,18 @@ def make_env_a2c_atari(env_id, seed, rank, log_dir):
         env = make_atari(env_id)
         env.seed(seed + rank)
 
-        obs_shape = env.observation_space.shape
+        #obs_shape = env.observation_space.shape
+
 
         if log_dir is not None:
             env = bench.Monitor(env, os.path.join(log_dir, str(rank)))
-            if rank == 8:
-                monitor = GPUMonitor()
-                env = GPUMonitorWrapper(monitor, env, os.path.join(log_dir, env_id))
+            monitor = GPUMonitor()
+            #if rank == 8:
+            env = GPUMonitorWrapper(monitor, env, os.path.join(log_dir, env_id)+ "_" + str(rank) + "_" )
 
         env = wrap_deepmind(env)
 
-        obs_shape = env.observation_space.shape
+        #obs_shape = env.observation_space.shape
         env = WrapPyTorch(env)
 
         return env

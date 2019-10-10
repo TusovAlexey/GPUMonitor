@@ -17,7 +17,7 @@ def arg_parser():
                         help="Name of the gym environment used to train the agents")
     parser.add_argument("--batch_size", dest='batch_size', type=int, default=32,
                         help="Batch size input to NN")
-    parser.add_argument("--max_frames", dest='max_frames', type=int, default=1000000, help="Max frames")
+    parser.add_argument("--max_frames", dest='max_frames', type=int, default=10000000, help="Max frames")
     parser.add_argument("--model", dest='model', type=str, default="DQN", help="Reinforcement learning model to use")
     args = parser.parse_args()
     return args

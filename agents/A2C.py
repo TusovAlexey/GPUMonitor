@@ -19,6 +19,7 @@ from baselines.common.vec_env.subproc_vec_env import SubprocVecEnv
 from utils.hyperparameters import Config
 from utils.plot import plot
 from utils.wrappers import make_env_a2c_atari
+import pandas as pd
 import matplotlib
 matplotlib.use('Agg')
 
@@ -180,7 +181,7 @@ def A2C_experiment(env, batch_size, max_frames, log_dir):
         torch.cuda.manual_seed(seed)
 
     torch.set_num_threads(1)
-
+    #monitor = GPUMonitor()
     env_id = env
     envs = [make_env_a2c_atari(env_id, seed, i, log_dir) for i in range(config.num_agents)]
     envs = SubprocVecEnv(envs) if config.num_agents > 1 else DummyVecEnv(envs)
@@ -208,10 +209,9 @@ def A2C_experiment(env, batch_size, max_frames, log_dir):
     final_rewards = np.zeros(config.num_agents, dtype=np.float)
 
     start = timer()
-
     print_step = 1
     print_threshold = 10
-
+    #os.remove('./log/A2C/logs.csv')
     for frame_idx in range(1, config.MAX_FRAMES + 1):
         for step in range(config.rollout):
             with torch.no_grad():
@@ -248,8 +248,19 @@ def A2C_experiment(env, batch_size, max_frames, log_dir):
                 clear_output()
                 end = timer()
                 total_num_steps = (frame_idx + 1) * config.num_agents * config.rollout
-                # print(
-                #     "Updates {}, Num Timesteps {}, FPS {},\nMean/Median Reward {:.1f}/{:.1f}, Min/Max Reward {:.1f}/{:.1f},\nEntropy {:.5f}, Value Loss {:.5f}, Policy Loss {:.5f}".
+                #df = pd.DataFrame({'frame': frame_idx, 'timesteps': total_num_steps, 'fps': int(total_num_steps / (end - start)),
+                #                   'mean reward': np.mean(final_rewards), 'median reward': np.median(final_rewards),
+                #                   'min reward': np.min(final_rewards), 'max rewards': np.max(final_rewards),
+                #                   'entropy': dist_entropy, 'value loss': value_loss, 'action loss': action_loss})
+                #if not os.path.isfile('./log/A2C/logs.csv'):
+                #    df.to_csv('./log/A2C/logs.csv', header='column_names')
+                #else:
+                #    df.to_csv('./log/A2C/logs.csv', mode='a', header=False)
+                #with open("./log/A2C/logs.txt", "a") as myfile:
+                #    myfile.write(
+                #        "Frame {}, Num Timesteps {}, FPS {},"
+                #        "Mean/Median Reward {:.1f}/{:.1f}, Min/Max Reward {:.1f}/{:.1f},"
+                #        "Entropy {:.5f}, Value Loss {:.5f}, Policy Loss {:.5f}".
                 #     format(frame_idx, total_num_steps,
                 #            int(total_num_steps / (end - start)),
                 #            np.mean(final_rewards),

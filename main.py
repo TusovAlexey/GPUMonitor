@@ -3,6 +3,7 @@ from agents.DQN import DQN_experiment
 from agents.A2C import A2C_experiment
 from agents.Rainbow import Rainbow_experiment
 from agents.DDQN import DDQN_experiment
+from agents.Dueling_DQN import Dueling_DQN_experiment
 
 
 def arg_parser():
@@ -32,8 +33,8 @@ if __name__ == '__main__':
 #        #NSTEP_DQN(args.env, args.batch_size, args.max_frames, args.log_dir)
     elif args.model == "DDQN" or args.model == "ALL":
         DDQN_experiment(args.env, args.batch_size, args.max_frames, args.log_dir)
-#    elif args.model == "Dueling_DQN" or args.model == "ALL":
-#        #Dueling_DQN(args.env, args.batch_size, args.max_frames, args.log_dir)
+    elif args.model == "Dueling_DQN" or args.model == "ALL":
+        Dueling_DQN_experiment(args.env, args.batch_size, args.max_frames, args.log_dir)
 #    elif args.model == "Noisy_nets_DQN" or args.model == "ALL":
 #        #Noisy_nets_DQN(args.env, args.batch_size, args.max_frames, args.log_dir)
 #    elif args.model == "Priority_reply_DQN" or args.model == "ALL":

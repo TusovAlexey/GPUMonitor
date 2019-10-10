@@ -1,0 +1,80 @@
+\documentclass[11 pt, twocolumn]{article}
+
+\usepackage{hyperref}
+\usepackage{titling}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage[margin=0.8in]{geometry}
+\usepackage{graphicx}
+\usepackage{color}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+\setlength{\droptitle}{-5em}
+\setlength{\columnsep}{2em}
+
+\title{Evolution strategy for Atari agents}
+\author{Ira Gorodovskaya, Alexey Tusov}
+\date{Spring 2019}
+
+\newcommand{\todo}[1]{{\color{red} TODO: {#1}}}
+\newcommand{\algspace}{\hspace{\algorithmicindent}}
+
+\begin{document}
+\maketitle
+\section{Abstract}
+Graphics Processing Units (GPUs) can significantly accelerate the training process for many deep learning models. Training models for tasks like image classification, video analysis, and natural language processing involves compute-intensive matrix multiplication and other operations that can take advantage of a GPU's massively parallel architecture.
+
+However in practice, average GPU utilization for deep learning jobs tends to be surprisingly low. We can observe a quite similar picture with respect to average GPU memory usage.
+
+In this paper, we present a novel methods for monitoring GPU metrics for the Arcade Learning Environment (ALE) and use it to benchmark GPU utilization among different Reinforcement Learning algorithms and try to find dependence between learning performances and GPU utilization.
+
+
+\section{Introduction}
+Reinforcement learning (RL) is about an agent interacting with the environment, learning an optimal
+policy, by trial and error, for sequential decision making problems, in a wide range of fields in natural
+sciences, social sciences, and engineering.
+
+A reinforcement learning (RL) agent observes states, executes actions, and receives rewards, with
+major components of value function, policy and model. A RL problem may be formulated as a
+prediction, control, or planning problem, and solution methods may be model-free or model-based,
+and value-based or policy-based. Exploration vs. exploitation is a fundamental tradeoff in RL.
+Representation is relevant to all elements in RL problems.
+
+Our contributions in this work are as follows:
+
+
+
+\section{Problem Description}
+
+\subsection{Main Objective}
+
+\subsection{Implementation}
+
+
+\subsubsection{DQN}
+
+\subsubsection{A2C}
+Researchers found you can write a synchronous, deterministic implementation that waits for each actor to finish its segment of experience before performing an update, averaging over all of the actors. One advantage of this method is that it can more effectively use of GPUs, which perform best with large batch sizes. This algorithm is naturally called A2C, short for advantage actor critic.
+
+\subsubsection{Rainbow}
+
+
+\section{Experiments}
+Common benchmarks for general RL algorithms are Atari games in the Arcade Learning Environment (ALE) for discrete control, and simulated robots using the MuJoCo physics engine in OpenAI
+Gym for continuous control.
+
+The Arcade Learning Environment (ALE) (Bellemare et al., 2013; Machado et al., 2017) is a framework composed of Atari 2600 games to develop and evaluate AI agents. OpenAI Gym, at https://gym.openai.com, is a toolkit for the development of RL algorithms, consisting of environments, e.g., Atari games and simulated robots, and a site for the comparison and reproduction of results.
+
+\subsection{Setup}
+
+\subsection{Results}
+
+\section{Conclusion}
+
+\section{References}
+
+\end{document}

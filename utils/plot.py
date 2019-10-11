@@ -473,7 +473,7 @@ def plot_reward(folder, game, name, num_steps, bin_size=10, smooth=1, time=None,
 def plot_gpu_aux(folder, game, name, num_steps, time, save_filename, x, y, y_label, ipynb=False):
     matplotlib.rcParams.update({'font.size': 20})
     fig = plt.figure(figsize=(20, 5))
-    plt.plot(x, y, label="{}".format(name + "- GPU memory usage"))
+    plt.plot(x, y, label="{}".format(name))
     tick_fractions = np.array([0.1, 0.2, 0.4, 0.6, 0.8, 1.0])
     ticks = tick_fractions * num_steps
     tick_names = ["{:.0e}".format(tick) for tick in ticks]

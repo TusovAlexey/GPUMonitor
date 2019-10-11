@@ -15,6 +15,7 @@ from utils.wrappers import *
 from utils.hyperparameters import Config
 import matplotlib
 matplotlib.use('Agg')
+from utils.plot import plot_reward
 
 
 class Model(DQN_Agent):
@@ -102,27 +103,6 @@ class Model(DQN_Agent):
         return next_dist.sum(dim=2).max(1)[1].view(next_states.size(0), 1, 1).expand(-1, -1, self.atoms)
 
 
-def plot(folder, frame_idx, rewards, losses, sigma, elapsed_time, ipynb=False, save_filename="RainbowReward"):
-    clear_output(True)
-    plt.figure(figsize=(20,5))
-    plt.subplot(131)
-    plt.title('frame %s. reward: %s. time: %s' % (frame_idx, np.mean(rewards[-10:]), elapsed_time))
-    plt.plot(rewards)
-    if losses:
-        plt.subplot(132)
-        plt.title('loss')
-        plt.plot(losses)
-    if sigma:
-        plt.subplot(133)
-        plt.title('noisy param magnitude')
-        plt.plot(sigma)
-    if ipynb:
-        plt.show()
-    else:
-        plt.savefig(folder + save_filename)
-    plt.clf()
-    plt.close()
-
 
 def Rainbow_experiment(env, batch_size, max_frames, log_dir):
     log_dir = log_dir + "Rainbow/"
@@ -169,6 +149,7 @@ def Rainbow_experiment(env, batch_size, max_frames, log_dir):
 
     env_id = env
     env = make_atari(env_id)
+    env = bench.Monitor(env, os.path.join(log_dir, env_id))
     monitor = GPUMonitor()
     env = GPUMonitorWrapper(monitor, env, os.path.join(log_dir, env_id))
     env = wrap_deepmind(env, frame_stack=False)
@@ -199,11 +180,11 @@ def Rainbow_experiment(env, batch_size, max_frames, log_dir):
                      timedelta(seconds=int(timer() - start)))
                 break
 
-        if frame_idx % 10000 == 0:
-            plot(log_dir, frame_idx, model.rewards, None, None,
-                 timedelta(seconds=int(timer() - start)))
-
+        if frame_idx % 100 == 0:
             dtime = int(timer() - start)
+            plot_reward(log_dir, env_id, 'Rainbow', config.MAX_FRAMES, bin_size=10, smooth=1,
+                        time=timedelta(seconds=dtime), save_filename='RainbowReward.png')
+
             plot_gpu(log_dir, env_id, 'Rainbow', config.MAX_FRAMES, bin_size=10, smooth=1,
                      time=timedelta(seconds=dtime))
 

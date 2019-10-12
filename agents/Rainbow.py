@@ -176,8 +176,9 @@ def Rainbow_experiment(env, batch_size, max_frames, log_dir):
             episode_reward = 0
 
             if np.mean(model.rewards[-10:]) > 19:
-                plot(log_dir, frame_idx, model.rewards, None, None,
-                     timedelta(seconds=int(timer() - start)))
+                dtime = int(timer() - start)
+                plot_reward(log_dir, env_id, 'Rainbow', config.MAX_FRAMES, bin_size=10, smooth=1,
+                            time=timedelta(seconds=dtime), save_filename='RainbowReward.png')
                 break
 
         if frame_idx % 100 == 0:

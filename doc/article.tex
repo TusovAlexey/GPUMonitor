@@ -8,6 +8,8 @@
 \usepackage[margin=0.8in]{geometry}
 \usepackage{graphicx}
 \usepackage{color}
+\usepackage{enumitem}
+\setlist[enumerate]{label*=\arabic*.}
 
 \makeatletter
 \def\BState{\State\hskip-\ALG@thistlm}
@@ -74,11 +76,34 @@ For evaluation we prepared monitoring implementation of A2C, DQN, DDQN, Dueling 
 [ADD LINK TO OUT GITHUB]
 
 
-GPUMonitor is the main class for communication with GPUs and providing requested runtime information using py3nvml package, this class we used as reference from 
+\textbf{GPUMonitor} is the main class for communication with GPUs and providing requested runtime information using \textbf{py3nvml} package, this class we used as reference from 
 torchlearning repository [ADD REFERENCE].
+Supported GPU's real time information obtained: 
+\begin{enumerate}
+\item Device name
+\item Device memory
+\begin{enumerate}
+\item Total available memory [Mb]
+\item Used memory [Mb]
+\item Free memory [Mb]
+\item List of used memory by different processes 
+\end{enumerate}
+\item Temperature [Celsius]
+\item Power
+\begin{enumerate}
+\item Used power [W]
+\item Power limitation [W]
+\end{enumerate}
+\item Fan speed [Percent]
+\item Utilization
+\begin{enumerate}
+\item GPU utilization [Percent]
+\item GPU memory utilization [Percent]
+\end{enumerate}
+\end{enumerate}
 
 
-GPUMonitorWrapper is a wrapper class for RL environments, this class inherits from Wrapper class and could be added to model's wrappers hierarchy. It's supports logging directly to ".csv" log file every episode using ResultWriter class. GPUMonitorWrapper is our implementation and ResultWriter class implemented by use with reference to Monitor class from bench package.
+\textbf{GPUMonitorWrapper} is a wrapper class for RL environments, this class inherits from Wrapper class and could be added to model's wrappers hierarchy. It's supports logging directly to ".csv" log file every episode using \textbf{ResultWriter} class. \textbf{GPUMonitorWrapper} is our implementation and R\textbf{esultWriter} class implemented by use with reference to Monitor class from bench package.
 
 \subsection{RL agents}
 We used as reference DeepRL-Tutorials repository [ADD REFERENCE] for A2C, DQN, DDQN, Dueling DQN and Reinbow implementations for our agents implementation and experiments.

@@ -18,12 +18,12 @@
 \setlength{\droptitle}{-5em}
 \setlength{\columnsep}{2em}
 
-\title{\textbf{GPU Monitoring tool for Reinforcement Learning algorithms}\\\Large CS236605 - Deep Learning, Computer Science Department\\Technion, Israel Institute of technology}
+\title{\textbf{GPU Monitoring tool for Reinforcement Learning algorithms}\\\Large CS236605 - Deep Learning, Computer Science Department\\Technion, Israel Institute of Technology}
 
 \author{Ira Gorodovskaya, Alexey Tusov}
 \date{Spring 2019}
 
-\newcommand{\todo}[1]{{\color{red} TODO: {#1}}}
+\newcommand{\todo}[1]{{\color{red}}}
 \newcommand{\algspace}{\hspace{\algorithmicindent}}
 
 \begin{document}
@@ -63,22 +63,53 @@ Data copy could be done by DMA transfer, which requires pinned memory in CPU's g
 \end{figure}
 
 \subsection{RL algorithms}
-Provide brief introduction
-\subsection{Non parallel RL algorithms}
-Provide brief introduction for DQN, figures could be great
-\subsection{Parallel RL algorithms}
-Provide brief introduction for A2C, figures could be great
+In a standard reinforcement learning (RL) formulation as a Markov Decision Process, a learning agent aims to maximize the sum of discounted rewards experienced while interacting with an environment.
+At each time step, the agent perceives the state of the environment and
+takes an action, which causes the environment to transit into a new state. A scalar reward
+signal evaluates the quality of each transition, and the agent has to maximize the cumulative reward along the course of interaction.
+
+Next two sections provide a brief overview of several single-agent and multi-agent RL algorithms.
+
+\subsection{Single Agent RL algorithms}
+\textbf{DQN}: A reinforcement learning algorithm that was released by Google’s DeepMind, combines Q-Learning with deep neural networks to let RL work for complex, high-dimensional environments. \\
+\textbf{Dueling DQN}: Splits the neural network into two — one learns to provide an estimate of the value at every timestep, and the other calculates potential advantages of each action, and the two are combined for a single action-advantage Q function.
+
+
+\subsection{Multi-Agent RL algorithms}
+In addition to benefits owing to the distributed nature of the multi-agent solution, such as the speedup made possible by parallel computation, multiple RL agents can harness new benefits from sharing experience, e.g., by communication, teaching, or imitation.
+
+ \textbf{Asynchronous Advantage Actor-Critic (A3C)} consists of multiple independent agents (networks) with their own weights, who interact with a different copy of the environment in parallel. Thus, they can explore a bigger part of the state-action space in much less time.
+
+Unlike DQN, where a single agent represented by a single neural network interacts with a single environment, A3C utilizes multiple incarnations of the above in order to learn more efficiently. In A3C there is a global network, and multiple worker agents which each have their own set of network parameters.
+Each of these agents interacts with it’s own copy of the environment at the same time as the other agents are interacting with their environments. The reason this works better than having a single agent (beyond the speedup of getting more work done), is that the experience of each agent is independent of the experience of the others. In this way the overall experience available for training becomes more diverse.
+
+The agents (or workers) are trained in parallel and update periodically a global network, which holds shared parameters. The updates are not happening simultaneously and that’s where the asynchronous comes from. After each update, the agents resets their parameters to those of the global network and continue their independent exploration and training for n steps until they update themselves again.
+
+
+As an alternative to the asynchronous implementation, researchers found you can write a synchronous, deterministic implementation that waits for each agent to finish its segment of experience before performing an update, averaging over all of the agents. One advantage of this method is that it can more effectively use of GPUs, which perform best with large batch sizes. This algorithm is naturally called \textbf{A2C}, short for \textbf{Advantage Actor Critic}.
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.93\columnwidth]{A3C.png}
+\caption{Diagram of A3C high-level architecture}
+\vspace*{2pt}
+\end{figure}
+
+
+
 \subsection{Data for evaluation}
-For evaluation we prepared monitoring implementation of A2C, DQN, DDQN, Dueling DQN and Rainbow algorithms for Atari games learning, due to technical limitations we choose to use DQN and A2C (maybe also rainbow?) algorithms to learn playing Atari game Pong.
+For evaluation we prepared monitoring implementation of \textbf{A2C, DQN, DDQN, Dueling DQN and Rainbow} algorithms for Atari games learning, due to technical limitations we choose to use DQN and A2C algorithms to learn playing Atari game Pong.
 
 \section{Implementation and Experiments}
+Our implementation available online at \url{https://github.com/TusovAlexey/GPUMonitor}.
+
+
 \subsection{GPUMonitor and GPUMonitorWrapper}
-[ADD LINK TO OUT GITHUB]
 
-
-\textbf{GPUMonitor} is the main class for communication with GPUs and providing requested runtime information using \textbf{py3nvml} package, this class we used as reference from 
-torchlearning repository [ADD REFERENCE].
-Supported GPU's real time information obtained: 
+\textbf{GPUMonitor} is the main class for communication with GPUs and providing requested runtime information using \textbf{py3nvml} package, this class we used as reference from
+torchlearning repository at  \url{https://github.com/chenyaofo/torchlearning}.
+Supported GPU's real time information obtained:
 \begin{enumerate}
 \item Device name
 \item Device memory
@@ -86,7 +117,7 @@ Supported GPU's real time information obtained:
 \item Total available memory [Mb]
 \item Used memory [Mb]
 \item Free memory [Mb]
-\item List of used memory by different processes 
+\item List of used memory by different processes
 \end{enumerate}
 \item Temperature [Celsius]
 \item Power
@@ -106,7 +137,7 @@ Supported GPU's real time information obtained:
 \textbf{GPUMonitorWrapper} is a wrapper class for RL environments, this class inherits from Wrapper class and could be added to model's wrappers hierarchy. It's supports logging directly to ".csv" log file every episode using \textbf{ResultWriter} class. \textbf{GPUMonitorWrapper} is our implementation and R\textbf{esultWriter} class implemented by use with reference to Monitor class from bench package.
 
 \subsection{RL agents}
-We used as reference DeepRL-Tutorials repository [ADD REFERENCE] for A2C, DQN, DDQN, Dueling DQN and Reinbow implementations for our agents implementation and experiments.
+We used as reference DeepRL-Tutorials repository at \url{https://github.com/goncamateus/DeepRL-Tutorials} for A2C, DQN, DDQN, Dueling DQN and Rainbow implementations for our agents implementation and experiments.
 
 \subsection{Experiments}
 We used DQN and A2C checking the following scenarios:
@@ -159,49 +190,12 @@ In conclusion, we established our assumption of increasing compute power utiliza
 In addition we hope this tool maybe useful for researchers benchmarking their models for overview where and how it can be better utilized.
 
 
-\section{References}
-
-% I dont think it's relevant \ structured as they requested (https://vistalab-technion.github.io/cs236605/assignments/final-project)
-% There may be relevant information, it may be copied to sections upper
 %
 %
 %
+%Our synchronous A2C implementation performs better than our asynchronous implementations — we have not seen any evidence that the noise introduced by asynchrony provides any performance benefit. This A2C implementation is more cost-effective than A3C when using single-GPU machines, and is faster than a CPU-only A3C implementation when using larger policies.
 %
 %
-%
-%In a standard RL formulation as a Markov Decision Process, a learning agent aims to maximize the sum of discounted rewards experienced while interacting with an environment:
-%$ R_t=\sum_{k=0}^\infty{\gamma^k r_{t+k}} $, where $r$ is the reward and $\gamma\leq 1$ the discount factor. The value of a state, $V(s_t)=\mathbb{E}\left[R_t|s_t\right]$, is defined as the expected return under a given policy.  The Q-value, $Q(s_t,a_t)=\mathbb{E}\left[R_t|s_t,a_t\right]$ is the same but first using action $a_t$ to advance.
-%
-%In policy gradient methods, the policy is directly parameterized as a distribution over actions, as $\pi(a|s;\theta)$. The \textbf{Advantage Actor-Critic} algorithm learns to estimate state values $V(s;\theta)$, and iteratively optimizes the policy on fresh environment experience using gradient steps as $\mathbb{E}\left[\nabla_\theta\log\pi(a_t|s_t;\theta)A_t\right]$, where $A(s,a)=Q(s,a)-V(s)$ is the advantage, estimated as $R_t - V(s_t)$.
-%
-%Q-value learning methods instead parameterize the Q-function $Q(s,a;\theta)$, which in \textbf{DQN} is regressed against an objective as: $\mathbb{E}[\left(y_i-Q(a_i|s_i;\theta)\right)^2]$, where $y_i$ is the data-estimated Q-value given by $y_i=r_i + \gamma \max_a Q(a|s_{i+1};\theta^-)$.  The target network $\theta^-$ is periodically copied from $\theta$.  Training data is selected randomly from a replay buffer of recent experiences, each to be used multiple times. The use of distributional learning was combined with five other enhancements under the name \textbf{Rainbow}: Double-DQN, Dueling Networks, Prioritized Replay, n-step learning, and NoisyNets.
-%
-%
-%\section{Problem Description}
-%
-%\subsection{Main Objective}
-%
-%
-%
-%\subsection{Implementation}
-%
-%
-%
-%\section{Experiments}
-%Common benchmarks for general RL algorithms are Atari games in the Arcade Learning Environment (ALE) for discrete control, and simulated robots using the MuJoCo physics engine in OpenAI
-%Gym for continuous control.
-%
-%The Arcade Learning Environment (ALE) (Bellemare et al., 2013; Machado et al., 2017) is a framework composed of Atari 2600 games to develop and evaluate AI agents. OpenAI Gym, at https://gym.openai.com, is a toolkit for the development of RL algorithms, consisting of environments, e.g., Atari games and simulated robots, and a site for the comparison and reproduction of results.
-%Try to draw your attention to
-%
-%\subsection{Setup}
-%
-%\subsection{Results}
-%
-%\section{Conclusion}
-%GPUs are getting faster and faster but it doesn’t matter if the training code doesn’t completely use them. The good news is that for most people training machine learning models there is still a lot of simple things to do that will significantly improve efficiency.
-%
-%
-%\bibliography{Refs}
-%\bibliographystyle{ieeetr}
+\bibliography{Refs}
+\bibliographystyle{ieeetr}
 \end{document}

@@ -109,10 +109,54 @@ Supported GPU's real time information obtained:
 We used as reference DeepRL-Tutorials repository [ADD REFERENCE] for A2C, DQN, DDQN, Dueling DQN and Reinbow implementations for our agents implementation and experiments.
 
 \subsection{Experiments}
-We used DQN and A2C (Maybe also Rainbow?) in the following scenarios: [ADD LIST]
+We used DQN and A2C checking the following scenarios:
+\begin{enumerate}
+\item Comparing both models with default parameters
+\item Checking influence CPUs number in A2C model
+\item Checking influence of batch size in A2C model
+\end{enumerate}
+First of all we were interested to see if there is any confirmation for our assumption, better compute power utilization may lead to better learning performances, all our experiments done over PongNoFrameskip-v4 environment. Results are shown in Figure 2.
+\begin{figure}
+\centering
+\includegraphics[width=0.93\columnwidth]{2c_32b.png}
+\caption{Benchmarking different agents}
+\vspace*{2pt}
+\end{figure}
+
+
+
+In our next experiment we focused on one model, we chose to focus on A2C model, before starting this experiment we assume that maybe the CPU is a bottle neck for increasing our compute power utilization, as we introduced in subsection 3.1 GPU architecture contains large amount of computing processors while the CPU have much less processors. Results are shown in Figure 3.
+\begin{figure}
+\centering
+\includegraphics[width=0.93\columnwidth]{a2c_ncpus.png}
+\caption{Benchmarking different number of CPUs}
+\vspace*{2pt}
+\end{figure}
+
+
+
+In our last experiment we were interested if increasing the batch size may produce better performances. As we already seen, increasing utilization may increase learning performances, increasing batch size may also increase compute power utilization. For this experiment we used the same model of A2C agent and added additional execution with 512 batch size. Results are shown in figure 4.
+\begin{figure}
+\centering
+\includegraphics[width=0.93\columnwidth]{a2c_ncpus_nbatch.png}
+\caption{Benchmarking different number of CPUs and increasing batch size}
+\vspace*{2pt}
+\end{figure}
 
 \section{Results}
-[List the results for all our experiments, add plots and explain what we can learn from it].
+As seen in figure 2, our assumption may be partly confirmed, better GPU utilization would lead to faster learning. But regarding GPU utilization we expected to see different result, intuitively more utilized execution should use more compute power but based on constant value of used memory in DQN agent we can assume that high value of GPU utilization could be explained with high over head of memory transfers which are blocking other calculations or even maybe it's performs different matrix calculations.
+
+
+Our second experiment results we can see almost similar learning performances, in one hand we can see that less CPUs may learn faster in specific period but on the other hand we can see that more CPUs reached highest score earlier, similar to our assumption, and stays more stable in well learned model. Surprisingly, the implementation with 8 CPUs utilize less GPU compute power then similar one with 4 CPUs, it may be due to the difference in memory usage, while the implementation with 4 CPUs may have an overhead of data migration due to lack of memory the 8 CPUs implementation shouldn't.
+
+
+From our last experiment we conclude that increasing batch size may utilize more GPU compute power in some calculations but it shows almost same results as other implementations, this may be a good result for example where trying to increase compute power utilization may not always be worthwhile.
+
+
+In conclusion, we established our assumption of increasing compute power utilization may lead to better learning performances meanwhile we seen that considerations regarding this increments should be considered well avoiding the reversed results.
+
+
+In addition we hope this tool maybe useful for researchers benchmarking their models for overview where and how it can be better utilized.
 
 
 \section{References}

@@ -3,6 +3,11 @@ GPU utilization benchmarking during reinforcement learning models execution, thi
 This utility could help users to understand their model performances and to direct the users to better utilization of existing hardware.   
 As part of our project we used this utility to benchmark GPU utilization among different reinforcement learning algorithms and tried to find relation between learning performances and GPU utilization. 
 
+# Usage instructions
+python ./main.py [--env "Atari environment"] [--log_dir "path to logging root dir"] [--batch_size batch size to nn] [--max_frames game length] [--model "requested agent"]
+For additional information please use: python ./main.py --help
+
+
 Algorithms we used for benchmarking:
 1. Human Level Control Through Deep Reinforement Learning [[Publication]](https://deepmind.com/research/publications/human-level-control-through-deep-reinforcement-learning/) [[code]](https://github.com/qfettes/DeepRL-Tutorials/blob/master/01.DQN.ipynb) 
 2. Multi-Step Learning (from Reinforcement Learning: An Introduction, Chapter 7) [[Publication]](http://incompleteideas.net/book/the-book-2nd.html)[[code]](https://github.com/qfettes/DeepRL-Tutorials/blob/master/02.NStep_DQN.ipynb) 

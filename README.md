@@ -9,6 +9,7 @@ python ./main.py [--env "Atari environment"] [--log_dir "path to logging root di
 For additional information please use: python ./main.py --help
 
 
+# Agents
 Algorithms we used for benchmarking:
 1. Human Level Control Through Deep Reinforement Learning [[Publication]](https://deepmind.com/research/publications/human-level-control-through-deep-reinforcement-learning/) [[code]](https://github.com/qfettes/DeepRL-Tutorials/blob/master/01.DQN.ipynb) 
 2. Multi-Step Learning (from Reinforcement Learning: An Introduction, Chapter 7) [[Publication]](http://incompleteideas.net/book/the-book-2nd.html)[[code]](https://github.com/qfettes/DeepRL-Tutorials/blob/master/02.NStep_DQN.ipynb) 
@@ -26,7 +27,7 @@ Algorithms we used for benchmarking:
 14. Proximal Policy Optimization Algorithms [[Publication]](https://arxiv.org/abs/1707.06347)[[code]](https://github.com/qfettes/DeepRL-Tutorials/blob/master/14.PPO.ipynb)
     
     
-Requirements: 
+# Requirements
 * Python 3.6
 * Numpy 
 * Gym 
@@ -38,7 +39,7 @@ Requirements:
 * psutil
 
 
-Acknowledgements: 
+# Acknowledgements
 * Credit to [@fbcotter](https://github.com/fbcotter/py3nvml) for py3nvml implementation
 * Credit to [@qfettes](https://github.com/qfettes/DeepRL-Tutorials) for algorithms implementation
 * Credit to [@goncamateus](https://github.com/goncamateus/DeepRL-Tutorials) for additional tuning of algorithms implementation

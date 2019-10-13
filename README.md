@@ -5,6 +5,7 @@ As part of our project we used this utility to benchmark GPU utilization among d
 
 # Usage instructions
 python ./main.py [--env "Atari environment"] [--log_dir "path to logging root dir"] [--batch_size batch size to nn] [--max_frames game length] [--model "requested agent"]
+
 For additional information please use: python ./main.py --help
 
 
